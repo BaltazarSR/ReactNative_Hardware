@@ -5,6 +5,7 @@ import { RootStackParamList } from '../models/RootParamsListModel';
 import ActivityScreen from '../views/screens/ActivityScreen';
 import StatsScreen from '../views/screens/StatsScreen';
 import MapScreen from '../views/screens/MapScreen';
+import LogsScreen from '../views/screens/LogsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,6 +31,13 @@ export default function AppNavigator() {
                 <Stack.Screen
                     name="Map"
                     component={MapScreen}
+                    options={{
+                        presentation: 'modal',
+                    }}
+                />
+                <Stack.Screen
+                    name="Logs"
+                    component={LogsScreen}
                     options={{
                         presentation: 'modal',
                     }}

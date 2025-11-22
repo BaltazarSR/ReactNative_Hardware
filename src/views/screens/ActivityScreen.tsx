@@ -1,23 +1,58 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useActivityController } from '../../controllers/ActivityController';
+import ActivityStartedScreen from '../components/ActivityStartedScreen';
+import ActivityNotStartedScreen from '../components/ActivityNotStartedScreen';
 
 export default function ActivityScreen() {
   
   const {
-    handleGoToStats
+    latitude,
+    longitude,
+    speed,
+    acceleration,
+    confidence,
+    actKind,
+    duration,
+    distance,
+    calories,
+    steps,
+    actStatus,
+    handleGoToStats,
+    handleCheckLogs,
+    handleStopWorkout,
+    handleStartWorkout
   } = useActivityController();
 
   return (
-    <View style={styles.container}>
-      <Text>Activity Screen!</Text>
-    </View>
+    <>
+      {actStatus ? (
+        <ActivityStartedScreen 
+          latitude={latitude}
+          longitude={longitude}
+          speed={speed}
+          acceleration={acceleration}
+          confidence={confidence}
+          actKind={actKind}
+          duration={duration}
+          distance={distance}
+          calories={calories}
+          steps={steps}
+          handleCheckLogs={handleCheckLogs}
+          handleStopWorkout={handleStopWorkout}
+        />
+      ) : ( 
+        <ActivityNotStartedScreen 
+          handleGoToStats={handleGoToStats}
+          handleStartWorkout={handleStartWorkout}
+        />
+      )}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },

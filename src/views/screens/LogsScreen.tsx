@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { useLogsController } from '../../controllers/LogsController';
 import { ActivityType } from '../../models/ActivityType';
 import { useRoute } from '@react-navigation/native';
@@ -41,71 +41,70 @@ export default function LogsScreen() {
         </Text>
       </View>
       
-      <ScrollView 
-        style={styles.scrollView} 
+      <FlatList
+        data={displayLogs}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.scrollContent}
-      >
-        {displayLogs.length === 0 ? (
+        ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No logs yet</Text>
           </View>
-        ) : (
-          displayLogs.map((log) => (
-            <View key={log.id} style={styles.logItem}>
-              <View style={styles.logHeader}>
-                <Text style={styles.logTime}>{log.duration}</Text>
-                <View style={[
-                  styles.activityBadge,
-                  { backgroundColor: getActivityColor(log.activityType) }
-                ]}>
-                  <Text style={styles.activityText}>{log.activityType}</Text>
-                </View>
-              </View>
-              
-              <View style={styles.divider}></View>
-              
-              <View style={styles.logContent}>
-                <View style={styles.logRow}>
-                  <View style={styles.logColumn}>
-                    <Text style={styles.logLabel}>Distance</Text>
-                    <Text style={styles.logValue}>{log.distance} m</Text>
-                  </View>
-                  <View style={styles.logColumn}>
-                    <Text style={styles.logLabel}>Steps</Text>
-                    <Text style={styles.logValue}>{log.steps}</Text>
-                  </View>
-                  <View style={styles.logColumn}>
-                    <Text style={styles.logLabel}>Calories</Text>
-                    <Text style={styles.logValue}>{log.calories}</Text>
-                  </View>
-                </View>
-                
-                <View style={styles.logRow}>
-                  <View style={styles.logColumn}>
-                    <Text style={styles.logLabel}>Speed</Text>
-                    <Text style={styles.logValue}>{log.speed} m/s</Text>
-                  </View>
-                  <View style={styles.logColumn}>
-                    <Text style={styles.logLabel}>Acceleration</Text>
-                    <Text style={styles.logValue}>{log.acceleration} m/s²</Text>
-                  </View>
-                  <View style={styles.logColumn}>
-                    <Text style={styles.logLabel}>Confidence</Text>
-                    <Text style={styles.logValue}>{log.confidence}%</Text>
-                  </View>
-                </View>
-                
-                <View style={styles.locationContainer}>
-                  <Text style={styles.logLabel}>Location</Text>
-                  <Text style={styles.locationValue}>
-                    {log.latitude}, {log.longitude}
-                  </Text>
-                </View>
+        )}
+        renderItem={({ item: log }) => (
+          <View style={styles.logItem}>
+            <View style={styles.logHeader}>
+              <Text style={styles.logTime}>{log.duration}</Text>
+              <View style={[
+                styles.activityBadge,
+                { backgroundColor: getActivityColor(log.activityType) }
+              ]}>
+                <Text style={styles.activityText}>{log.activityType}</Text>
               </View>
             </View>
-          ))
+            
+            <View style={styles.divider}></View>
+            
+            <View style={styles.logContent}>
+              <View style={styles.logRow}>
+                <View style={styles.logColumn}>
+                  <Text style={styles.logLabel}>Distance</Text>
+                  <Text style={styles.logValue}>{log.distance} m</Text>
+                </View>
+                <View style={styles.logColumn}>
+                  <Text style={styles.logLabel}>Steps</Text>
+                  <Text style={styles.logValue}>{log.steps}</Text>
+                </View>
+                <View style={styles.logColumn}>
+                  <Text style={styles.logLabel}>Calories</Text>
+                  <Text style={styles.logValue}>{log.calories}</Text>
+                </View>
+              </View>
+              
+              <View style={styles.logRow}>
+                <View style={styles.logColumn}>
+                  <Text style={styles.logLabel}>Speed</Text>
+                  <Text style={styles.logValue}>{log.speed} m/s</Text>
+                </View>
+                <View style={styles.logColumn}>
+                  <Text style={styles.logLabel}>Acceleration</Text>
+                  <Text style={styles.logValue}>{log.acceleration} m/s²</Text>
+                </View>
+                <View style={styles.logColumn}>
+                  <Text style={styles.logLabel}>Confidence</Text>
+                  <Text style={styles.logValue}>{log.confidence}%</Text>
+                </View>
+              </View>
+              
+              <View style={styles.locationContainer}>
+                <Text style={styles.logLabel}>Location</Text>
+                <Text style={styles.locationValue}>
+                  {log.latitude}, {log.longitude}
+                </Text>
+              </View>
+            </View>
+          </View>
         )}
-      </ScrollView>
+      />
     </View>
   );
 }
@@ -136,9 +135,6 @@ const styles = StyleSheet.create({
     color: '#FFFAFA',
     fontFamily: 'StackSans-ExtraLight',
     marginLeft: 5,
-  },
-  scrollView: {
-    flex: 1,
   },
   scrollContent: {
     paddingBottom: 20,

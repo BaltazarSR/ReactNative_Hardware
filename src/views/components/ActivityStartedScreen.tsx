@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   indCoordinateContainer: {
-    width: 110,
+    width: 120,
   },
   coordinatesText: {
     color: '#FFFAFA',

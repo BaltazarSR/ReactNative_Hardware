@@ -72,7 +72,7 @@ export const useMapController = ({ sessionId }: MapControllerProps) => {
         if (!selectedRoute) {
             return '0 points';
         }
-        return routeService.formatSteps(selectedRoute.logs.length);
+        return routeService.formatPoints(selectedRoute.logs.length);
     };
 
     return {

@@ -98,7 +98,7 @@ export class RouteService {
   }
 
   // Format steps for display
-  formatSteps(steps: number): string {
+  formatPoints(steps: number): string {
     return `${Math.round(steps)} points`;
   }
 }

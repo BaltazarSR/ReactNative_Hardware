@@ -9,7 +9,7 @@ export const useLogsController = ({ logs }: LogsControllerProps) => {
 
     useEffect(() => {
         setDisplayLogs(logs);
-        logger.log(`[Logs Controller] Logs updated: ${logs.length} entries`);
+        logger.log(`[Logs Controller] Logs updated: ${logs?.length || 0} entries`);
     }, [logs]);
 
     const handleTap = () => {

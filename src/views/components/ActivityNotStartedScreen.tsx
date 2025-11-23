@@ -29,6 +29,15 @@ export default function ActivityNotStartedScreen({
           Start workout
         </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.statsButton}
+        onPress={handleGoToStats}
+      >
+        <Text style={styles.statsButtonText}>
+          View Stats
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -45,7 +54,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 50,
-    marginBottom: 50,
+    marginBottom: 150,
   },
   button: {
     alignItems: 'center',
@@ -64,6 +73,27 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFAFA',
     fontSize: 25,
+    fontFamily: "StackSans-SemiBold",
+  },
+  statsButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#161616ff',
+    height: 60,
+    width: '80%',
+    borderRadius:25,
+    borderWidth: 2,
+    borderColor: '#00a00b',
+    shadowColor: '#000000',
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: .6,
+    shadowRadius: 5,
+    position: 'absolute',
+    bottom: 140,
+  },
+  statsButtonText: {
+    color: '#00a00b',
+    fontSize: 20,
     fontFamily: "StackSans-SemiBold",
   }
 });

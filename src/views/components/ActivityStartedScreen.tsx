@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { ActStartedProps } from '../../models/props/ActStartedProps';
 import { ActivityType } from '../../models/ActivityType';
-import { MapPinIcon, RunIcon, WalkIcon, CarIcon, QuestionIcon, StatsIcon, StepsIcon, RulerIcon, FireIcon, ClockIcon } from './Icon';
+import { MapPinIcon, RunIcon, WalkIcon, CarIcon, QuestionIcon, StatsIcon, StepsIcon, RulerIcon, FireIcon, ClockIcon, StandIcon } from './Icon';
 
 export default function ActivityStartedScreen({
     latitude,
@@ -45,7 +45,7 @@ export default function ActivityStartedScreen({
         );
       case ActivityType.IDLE:
         return (
-          <CarIcon
+          <StandIcon
             size={size}
             color={color}
           />

@@ -1,22 +1,14 @@
 import { ActivityType } from '../models/ActivityType';
 import { logger } from '../utils/logger';
-
-export interface ActivityClassification {
-  activity: ActivityType;
-  confidence: number;
-}
+import { ActivityClassification } from '../models/ActivityClassificationModel';
+import { ClassifierConfigModel, DEFAULT_CLASSIFIER_CONFIG } from '../models/ClassifierConfigModel';
 
 export class ActivityClassifierService {
-  // Thresholds for activity classification
-  private readonly IDLE_SPEED_THRESHOLD = 0.5; // m/s
-  private readonly WALKING_SPEED_MAX = 2.5; // m/s (~1-9 km/h)
-  private readonly RUNNING_SPEED_MAX = 7.0; // m/s (~9-25 km/h)
+  private config: ClassifierConfigModel;
 
-  private readonly IDLE_ACCEL_THRESHOLD = 0.3; // m/s²
-  private readonly WALKING_ACCEL_MIN = 0.3; // m/s²
-  private readonly WALKING_ACCEL_MAX = 2.0; // m/s²
-  private readonly RUNNING_ACCEL_MIN = 1.5; // m/s²
-  private readonly RUNNING_ACCEL_MAX = 4.0; // m/s²
+  constructor(config?: ClassifierConfigModel) {
+    this.config = config || DEFAULT_CLASSIFIER_CONFIG;
+  }
 
   // Classify activity based on speed and acceleration
   classifyActivity(speedMps: number, accelerationMps2: number): ActivityClassification {
@@ -24,48 +16,48 @@ export class ActivityClassifierService {
     let confidence: number = 0;
 
     // IDLE: Very low speed and acceleration
-    if (speedMps < this.IDLE_SPEED_THRESHOLD && accelerationMps2 < this.IDLE_ACCEL_THRESHOLD) {
+    if (speedMps < this.config.idleSpeedThreshold && accelerationMps2 < this.config.idleAccelThreshold) {
       activity = ActivityType.IDLE;
-      confidence = 95;
+      confidence = this.config.idleConfidence;
     }
     // WALKING: Low to moderate speed, moderate acceleration
     else if (
-      speedMps >= this.IDLE_SPEED_THRESHOLD &&
-      speedMps < this.WALKING_SPEED_MAX &&
-      accelerationMps2 >= this.WALKING_ACCEL_MIN &&
-      accelerationMps2 <= this.WALKING_ACCEL_MAX
+      speedMps >= this.config.idleSpeedThreshold &&
+      speedMps < this.config.walkingSpeedMax &&
+      accelerationMps2 >= this.config.walkingAccelMin &&
+      accelerationMps2 <= this.config.walkingAccelMax
     ) {
       activity = ActivityType.WALKING;
-      confidence = 85;
+      confidence = this.config.walkingConfidence;
     }
     // RUNNING: Moderate to high speed, higher acceleration
     else if (
-      speedMps >= this.WALKING_SPEED_MAX &&
-      speedMps < this.RUNNING_SPEED_MAX &&
-      accelerationMps2 >= this.RUNNING_ACCEL_MIN &&
-      accelerationMps2 <= this.RUNNING_ACCEL_MAX
+      speedMps >= this.config.walkingSpeedMax &&
+      speedMps < this.config.runningSpeedMax &&
+      accelerationMps2 >= this.config.runningAccelMin &&
+      accelerationMps2 <= this.config.runningAccelMax
     ) {
       activity = ActivityType.RUNNING;
-      confidence = 80;
+      confidence = this.config.runningConfidence;
     }
     // VEHICLE: High speed, low acceleration (smooth movement)
-    else if (speedMps >= this.RUNNING_SPEED_MAX) {
+    else if (speedMps >= this.config.runningSpeedMax) {
       activity = ActivityType.VEHICLE;
-      confidence = 90;
+      confidence = this.config.vehicleConfidence;
     }
     // Edge cases with lower confidence
-    else if (speedMps < this.IDLE_SPEED_THRESHOLD) {
+    else if (speedMps < this.config.idleSpeedThreshold) {
       activity = ActivityType.IDLE;
-      confidence = 60;
-    } else if (speedMps < this.WALKING_SPEED_MAX) {
+      confidence = this.config.edgeCaseIdleConfidence;
+    } else if (speedMps < this.config.walkingSpeedMax) {
       activity = ActivityType.WALKING;
-      confidence = 60;
-    } else if (speedMps < this.RUNNING_SPEED_MAX) {
+      confidence = this.config.edgeCaseWalkingConfidence;
+    } else if (speedMps < this.config.runningSpeedMax) {
       activity = ActivityType.RUNNING;
-      confidence = 60;
+      confidence = this.config.edgeCaseRunningConfidence;
     } else {
       activity = ActivityType.VEHICLE;
-      confidence = 70;
+      confidence = this.config.edgeCaseVehicleConfidence;
     }
 
     logger.log(
@@ -74,43 +66,5 @@ export class ActivityClassifierService {
     );
 
     return { activity, confidence };
-  }
-
-  // Update thresholds (for future calibration features)
-  updateThresholds(thresholds: Partial<{
-    idleSpeed: number;
-    walkingSpeedMax: number;
-    runningSpeedMax: number;
-    idleAccel: number;
-    walkingAccelMin: number;
-    walkingAccelMax: number;
-    runningAccelMin: number;
-    runningAccelMax: number;
-  }>): void {
-    if (thresholds.idleSpeed !== undefined) {
-      (this as any).IDLE_SPEED_THRESHOLD = thresholds.idleSpeed;
-    }
-    if (thresholds.walkingSpeedMax !== undefined) {
-      (this as any).WALKING_SPEED_MAX = thresholds.walkingSpeedMax;
-    }
-    if (thresholds.runningSpeedMax !== undefined) {
-      (this as any).RUNNING_SPEED_MAX = thresholds.runningSpeedMax;
-    }
-    if (thresholds.idleAccel !== undefined) {
-      (this as any).IDLE_ACCEL_THRESHOLD = thresholds.idleAccel;
-    }
-    if (thresholds.walkingAccelMin !== undefined) {
-      (this as any).WALKING_ACCEL_MIN = thresholds.walkingAccelMin;
-    }
-    if (thresholds.walkingAccelMax !== undefined) {
-      (this as any).WALKING_ACCEL_MAX = thresholds.walkingAccelMax;
-    }
-    if (thresholds.runningAccelMin !== undefined) {
-      (this as any).RUNNING_ACCEL_MIN = thresholds.runningAccelMin;
-    }
-    if (thresholds.runningAccelMax !== undefined) {
-      (this as any).RUNNING_ACCEL_MAX = thresholds.runningAccelMax;
-    }
-    logger.log('[ActivityClassifierService] Thresholds updated');
   }
 }

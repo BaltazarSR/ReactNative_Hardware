@@ -5,10 +5,12 @@ import { ActivityLog } from './ActivityLog';
 export type RootStackParamList = {
     Activity: undefined;
     Stats: undefined;
-    Map: undefined;
+    Map: { sessionId: string };
     Logs: { logs: ActivityLog[] };
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export type LogsScreenRouteProp = RouteProp<RootStackParamList, 'Logs'>;
+
+export type MapScreenRouteProp = RouteProp<RootStackParamList, 'Map'>;

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '../models/RootParamsListModel';
 import { ActivityType } from '../models/ActivityType';
 import { ActivityLog } from "../models/ActivityLog";
-import { LocationService, AccelerometerService, PedometerService, ActivityClassifierService } from '../services';
+import { LocationService, AccelerometerService, PedometerService, ActivityClassifierService, StorageService } from '../services';
 
 export const useActivityController = () => {
 
@@ -34,6 +34,7 @@ export const useActivityController = () => {
     const accelerometerServiceRef = useRef(new AccelerometerService());
     const pedometerServiceRef = useRef(new PedometerService());
     const activityClassifierRef = useRef(new ActivityClassifierService());
+    const storageServiceRef = useRef(new StorageService());
     
     // Refs for latest values (used in logging)
     const actStatusRef = useRef(actStatus);
@@ -187,9 +188,24 @@ export const useActivityController = () => {
         navigation.navigate('Logs', { logs });
     }
 
-    const handleStopWorkout = () => {
+    const handleStopWorkout = async () => {
         logger.log('[Activity Controller] Workout stopped');
         setActStatus(false);
+        
+        // Save workout session before resetting
+        const saved = await storageServiceRef.current.saveWorkoutSession(
+            parseFloat(distanceRef.current),
+            duration,
+            parseFloat(caloriesRef.current),
+            parseFloat(stepsRef.current),
+            logs
+        );
+        
+        if (saved) {
+            logger.log('[Activity Controller] Workout session saved successfully');
+        } else {
+            logger.log('[Activity Controller] Failed to save workout session');
+        }
         
         // Reset all services
         locationServiceRef.current.reset();

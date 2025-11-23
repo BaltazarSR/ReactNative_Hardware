@@ -37,7 +37,7 @@ export default function LogsScreen() {
           </Text>
         </View>
         <Text style={styles.headerSubtitle}>
-          {displayLogs.length} {displayLogs.length === 1 ? 'entry' : 'entries'}
+          {displayLogs?.length || 0} {displayLogs?.length === 1 ? 'entry' : 'entries'}
         </Text>
       </View>
       

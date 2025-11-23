@@ -19,7 +19,7 @@ export default function MapScreen() {
     formatDistance,
     formatDuration,
     formatCalories,
-    formatSteps,
+    formatPoints,
   } = useMapController( {sessionId} );
 
   if (loading) {
@@ -112,7 +112,7 @@ export default function MapScreen() {
 
           <View style={styles.statItem}>
             <MapPinIcon size={30} color="#FFFAFA" />
-            <Text style={styles.statValue}>{formatSteps()}</Text>
+            <Text style={styles.statValue}>{formatPoints()}</Text>
           </View>
         </View>
       </View>

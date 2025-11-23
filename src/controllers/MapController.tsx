@@ -68,11 +68,11 @@ export const useMapController = ({ sessionId }: MapControllerProps) => {
         return routeService.formatCalories(selectedRoute.calories);
     };
 
-    const formatSteps = () => {
+    const formatPoints = () => {
         if (!selectedRoute) {
             return '0 points';
         }
-        return routeService.formatSteps(selectedRoute.steps);
+        return routeService.formatSteps(selectedRoute.logs.length);
     };
 
     return {
@@ -84,6 +84,6 @@ export const useMapController = ({ sessionId }: MapControllerProps) => {
         formatDistance,
         formatDuration,
         formatCalories,
-        formatSteps,
+        formatPoints,
     };
 }

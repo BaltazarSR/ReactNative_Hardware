@@ -240,6 +240,6 @@ speed = distance / time
 - ✅ Persistent storage of workout data
 
 ## Screenshots
-<img width="293" height="633" alt="IMG_4427" src="https://github.com/user-attachments/assets/1fa2040c-a90b-48ae-9b9a-f1373111b520" />
+<img width="293" height="633" alt="IMG_4427" src="https://github.com/user-attachments/assets/a47044ef-8c04-4228-83c5-2ce310db2004" />
 <img width="293" height="633" alt="IMG_4425" src="https://github.com/user-attachments/assets/1914854d-b0f9-4ba3-b6a9-525b3107c6af" />
 <img width="293" height="633" alt="IMG_4426" src="https://github.com/user-attachments/assets/8afe2e88-8975-4f11-8cd0-1da5805b4775" />
